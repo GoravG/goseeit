@@ -1,0 +1,58 @@
+services:
+  goseeit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: goseeit:latest
+    container_name: goseeit
+    restart: unless-stopped
+
+    # Host network mode allows direct monitoring of physical network interfaces (e.g., wlo2, eth0)
+    # and eliminates NAT virtualization overhead.
+    network_mode: host
+
+    # Host PID mode allows accurate host CPU utilization, load averages, and uptime
+    pid: host
+
+    # Required volumes for comprehensive host & Docker monitoring on Linux / Intel NUC
+    volumes:
+      # Docker daemon socket for container status & resource inspection
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+      # Host procfs for CPU, memory, uptime, and load averages
+      - /proc:/host/proc:ro
+
+      # Host sysfs for hardware stats, temperature, and Intel DRM iGPU metrics
+      - /sys:/host/sys:ro
+
+      # Host root filesystem for storage capacity
+      - /:/host/root:ro,rslave
+
+      # Optional: Mount custom config.yaml if you wish to override settings via file
+      # - ./config.yaml:/app/config.yaml:ro
+
+    # Access to Intel Integrated GPU (DRM card0) for Iris Xe / UHD graphics
+    devices:
+      - /dev/dri:/dev/dri
+
+    environment:
+      # Direct gopsutil to host-mounted procfs and sysfs
+      - HOST_PROC=/host/proc
+      - HOST_SYS=/host/sys
+
+      # Server port
+      - GOSEEIT_SERVER_PORT=8080
+
+      # Intel NUC disk mount points or devices to monitor (adjust as needed, e.g. /dev/nvme0n1, /dev/sda)
+      - GOSEEIT_MONITOR_DISKS=/host/root,/dev/sda,/dev/nvme0n1
+
+      # Intel NUC network interfaces (e.g., wlo2 for WiFi, eth0/eno1 for Ethernet)
+      # Leave empty or specify your NUC interface names
+      - GOSEEIT_MONITOR_INTERFACES=wlo2,eth0,eno1
+
+      # Docker container monitoring enabled
+      - GOSEEIT_DOCKER_ENABLED=true
+      - GOSEEIT_DOCKER_SOCKET=unix:///var/run/docker.sock
+
+      # Intel GPU sysfs reader enabled
+      - GOSEEIT_INTEL_GPU_ENABLED=true

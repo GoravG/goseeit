@@ -1,0 +1,31 @@
+# goseeit configuration file
+
+server:
+  host: "0.0.0.0"
+  port: 8080
+  # Interval in milliseconds between metrics collection cycles (minimum 500)
+  poll_interval_ms: 1500
+
+monitor:
+  # Disk mount points or block device paths to monitor (space & I/O rates)
+  disks:
+    - "/"
+    - "/dev/sda"
+    - "/dev/nvme0n1"
+
+  # Network interfaces to monitor (throughput RX/TX bytes and packet rates).
+  # Leave empty [] to automatically monitor all non-loopback active physical interfaces.
+  interfaces:
+    - "wlo2"
+    - "eth0"
+    - "en0"
+
+  # Intel Integrated GPU monitoring (Linux /sys/class/drm/card0)
+  intel_gpu:
+    enabled: true
+    sysfs_path: "/sys/class/drm/card0"
+
+  # Docker Container resource monitoring
+  docker:
+    enabled: true
+    socket_path: "unix:///var/run/docker.sock"
