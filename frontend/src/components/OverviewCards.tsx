@@ -87,19 +87,18 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
   }, [cpuPercent, memUsedPercent, totalNetBps])
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
       {/* CPU KPI Card */}
       <KpiCard
         label="CPU Utilization"
-        icon={<Cpu className="text-sky-400" />}
+        icon={<Cpu className="text-[#2f5bff]" />}
         value={`${cpuPercent.toFixed(1)}%`}
         delta={cpuDelta}
-        deltaLabel="vs previous cycle"
         invertDelta={true}
         trend={cpuTrend}
-        className="glass-panel border-white/5 hover:border-sky-500/40 transition-colors"
+        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
       >
-        <span className="text-slate-400">
+        <span className="text-[#969696] font-mono text-xs">
           {snapshot?.cpu?.core_count ? `${snapshot.cpu.core_count} Cores` : 'Host CPU'}
         </span>
       </KpiCard>
@@ -107,15 +106,14 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
       {/* Memory KPI Card */}
       <KpiCard
         label="Memory In Use"
-        icon={<MemoryStick className="text-emerald-400" />}
+        icon={<MemoryStick className="text-[#00bb7f]" />}
         value={`${memUsedPercent.toFixed(1)}%`}
         delta={memDelta}
-        deltaLabel="vs previous cycle"
         invertDelta={true}
         trend={memTrend}
-        className="glass-panel border-white/5 hover:border-emerald-500/40 transition-colors"
+        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
       >
-        <span className="text-slate-400">
+        <span className="text-[#969696] font-mono text-xs">
           {formatBytes(memUsedBytes)} / {formatBytes(memTotalBytes)}
         </span>
       </KpiCard>
@@ -123,13 +121,13 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
       {/* Storage KPI Card */}
       <KpiCard
         label="Storage Used"
-        icon={<HardDrive className="text-amber-400" />}
+        icon={<HardDrive className="text-[#f99c00]" />}
         value={`${diskUsedPercent.toFixed(1)}%`}
         deltaLabel={primaryDisk ? primaryDisk.mount_point : '/'}
         trend={diskTrend}
-        className="glass-panel border-white/5 hover:border-amber-500/40 transition-colors"
+        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
       >
-        <span className="text-slate-400">
+        <span className="text-[#969696] font-mono text-xs">
           {formatBytes(diskUsedBytes)} / {formatBytes(diskTotalBytes)}
         </span>
       </KpiCard>
@@ -137,13 +135,13 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
       {/* Network Traffic KPI Card */}
       <KpiCard
         label="Network Traffic"
-        icon={<Activity className="text-indigo-400" />}
+        icon={<Activity className="text-[#ac4bff]" />}
         value={formatSpeed(totalNetBps)}
         delta={netDelta}
         trend={netTrend}
-        className="glass-panel border-white/5 hover:border-indigo-500/40 transition-colors"
+        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
       >
-        <span className="text-slate-400 whitespace-nowrap text-xs">
+        <span className="text-[#969696] whitespace-nowrap text-xs font-mono">
           ↓ {formatSpeed(totalRx)} · ↑ {formatSpeed(totalTx)}
         </span>
       </KpiCard>
@@ -152,25 +150,25 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
       {gpuAvailable ? (
         <KpiCard
           label="Intel iGPU Load"
-          icon={<Zap className="text-purple-400" />}
+          icon={<Zap className="text-[#ff2357]" />}
           value={`${gpuUsage.toFixed(1)}%`}
           trend={gpuTrend}
-          className="glass-panel border-white/5 hover:border-purple-500/40 transition-colors"
+          className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
         >
-          <span className="text-slate-400">
+          <span className="text-[#969696] font-mono text-xs">
             {gpu?.cur_freq_mhz ? `${gpu.cur_freq_mhz} MHz` : 'Active DRM'}
           </span>
         </KpiCard>
       ) : (
         <KpiCard
           label="Server Uptime"
-          icon={<Server className="text-emerald-400" />}
+          icon={<Server className="text-[#00bb7f]" />}
           value={formatUptime(snapshot?.host?.uptime_seconds ?? 0)}
-          deltaLabel="continuous runtime"
+          deltaLabel="active"
           trend={[1, 2, 3, 4, 5, 6, 7, 8]}
-          className="glass-panel border-white/5 hover:border-emerald-500/40 transition-colors"
+          className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
         >
-          <span className="text-slate-400 font-mono text-[11px] truncate">
+          <span className="text-[#969696] font-mono text-[11px] truncate">
             {snapshot?.host?.hostname ?? 'host'}
           </span>
         </KpiCard>

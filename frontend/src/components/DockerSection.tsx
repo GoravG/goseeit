@@ -34,17 +34,17 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
                 <div
                   className={`p-1.5 rounded-lg border ${
                     isRunning
-                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                      : 'bg-slate-800 border-slate-700 text-slate-500'
+                      ? 'bg-[#00bb7f]/10 border-[#00bb7f]/30 text-[#00bb7f]'
+                      : 'bg-[#242424] border-white/5 text-[#6d6d6d]'
                   }`}
                 >
                   <Box className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <div className="font-sans font-semibold text-slate-100 flex items-center gap-2">
+                  <div className="font-sans font-semibold text-[#ededed] flex items-center gap-2">
                     {c.name}
                   </div>
-                  <div className="text-[11px] text-slate-400 font-mono">
+                  <div className="text-[11px] text-[#969696] font-mono">
                     {c.id.slice(0, 12)}
                   </div>
                 </div>
@@ -64,20 +64,20 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-1.5">
                   {isRunning ? (
-                    <span className="flex items-center gap-1 text-emerald-400 font-medium text-xs">
-                      <Play className="w-3 h-3 fill-emerald-400/20" /> Running
+                    <span className="flex items-center gap-1 text-[#00bb7f] font-medium text-xs">
+                      <Play className="w-3 h-3 fill-[#00bb7f]/20" /> Running
                     </span>
                   ) : isPaused ? (
-                    <span className="flex items-center gap-1 text-amber-400 font-medium text-xs">
+                    <span className="flex items-center gap-1 text-[#f99c00] font-medium text-xs">
                       <Pause className="w-3 h-3" /> Paused
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-rose-400 font-medium text-xs">
+                    <span className="flex items-center gap-1 text-[#ff6568] font-medium text-xs">
                       <Square className="w-3 h-3" /> Exited
                     </span>
                   )}
                 </div>
-                <div className="text-[11px] text-slate-400 truncate max-w-[140px] font-sans">
+                <div className="text-[11px] text-[#969696] truncate max-w-[140px] font-sans">
                   {status}
                 </div>
               </div>
@@ -87,7 +87,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
         helper.accessor('image', {
           header: ({ column }) => <DataTableColumnHeader column={column} title="Image" />,
           cell: ({ row }) => (
-            <div className="font-mono text-xs text-slate-300 truncate max-w-[180px]">
+            <div className="font-mono text-xs text-[#c2c2c2] truncate max-w-[180px]">
               {row.original.image}
             </div>
           ),
@@ -102,7 +102,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
               <div className="flex flex-col items-end gap-1 min-w-[70px]">
                 <span
                   className={`font-mono text-xs font-semibold ${
-                    cpu > 80 ? 'text-rose-400' : cpu > 40 ? 'text-amber-400' : 'text-slate-200'
+                    cpu > 80 ? 'text-[#ff6568]' : cpu > 40 ? 'text-[#f99c00]' : 'text-[#ededed]'
                   }`}
                 >
                   {cpu.toFixed(1)}%
@@ -110,9 +110,9 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
                 <Progress
                   value={cpu}
                   indicatorClassName={
-                    cpu > 80 ? 'bg-rose-500' : cpu > 40 ? 'bg-amber-500' : 'bg-sky-400'
+                    cpu > 80 ? 'bg-[#fb2c36]' : cpu > 40 ? 'bg-[#f99c00]' : 'bg-[#2f5bff]'
                   }
-                  className="h-1 w-14 bg-slate-800"
+                  className="h-1 w-14 bg-[#2a2a2a]"
                 />
               </div>
             )
@@ -126,10 +126,10 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
             const c = row.original
             return (
               <div className="flex flex-col items-end gap-0.5 text-right font-mono">
-                <span className="text-xs text-slate-200 font-medium">
+                <span className="text-xs text-[#ededed] font-medium">
                   {formatBytes(c.memory_used_bytes)}
                 </span>
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[10px] text-[#969696]">
                   {c.memory_percent.toFixed(1)}% of {formatBytes(c.memory_limit_bytes)}
                 </span>
               </div>
@@ -143,10 +143,10 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           cell: ({ row }) => {
             const c = row.original
             return (
-              <div className="text-right font-mono text-xs text-slate-300">
-                <span className="text-emerald-400">↓ {formatBytes(c.net_rx_bytes)}</span>
-                <span className="text-slate-600 mx-1">/</span>
-                <span className="text-sky-400">↑ {formatBytes(c.net_tx_bytes)}</span>
+              <div className="text-right font-mono text-xs text-[#c2c2c2]">
+                <span className="text-[#00bb7f]">↓ {formatBytes(c.net_rx_bytes)}</span>
+                <span className="text-[#4e4e4e] mx-1">/</span>
+                <span className="text-[#2f5bff]">↑ {formatBytes(c.net_tx_bytes)}</span>
               </div>
             )
           },
@@ -156,36 +156,36 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
   )
 
   return (
-    <Card className="glass-panel border-white/5">
+    <Card className="glass-panel border-white/10">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400">
+            <div className="p-2 rounded-lg bg-[#2f5bff]/10 border border-[#2f5bff]/20 text-[#2f5bff]">
               <Box className="w-4 h-4" />
             </div>
             <div>
-              <CardTitle className="text-base font-semibold text-white">
+              <CardTitle className="text-base font-semibold text-[#ededed]">
                 Docker Containers
               </CardTitle>
-              <div className="text-xs text-slate-400">
-                Real-time daemon inspection via <code className="text-slate-300">/var/run/docker.sock</code>
+              <div className="text-xs text-[#969696]">
+                Real-time daemon inspection via <code className="text-[#ededed] bg-[#2a2a2a] px-1 py-0.5 rounded text-[11px]">/var/run/docker.sock</code>
               </div>
             </div>
           </div>
           <Badge
             variant="outline"
-            className="font-mono text-xs border-slate-700 bg-slate-900/60 px-3 py-1"
+            className="font-mono text-xs border-white/10 bg-[#1c1c1e] px-3 py-1"
           >
-            <span className="text-emerald-400 font-bold mr-1">{runningCount}</span>
-            <span className="text-slate-400">/ {containers.length} Running</span>
+            <span className="text-[#00bb7f] font-bold mr-1">{runningCount}</span>
+            <span className="text-[#969696]">/ {containers.length} Running</span>
           </Badge>
         </div>
       </CardHeader>
 
       <CardContent>
         {dockerError ? (
-          <div className="flex items-center gap-2.5 p-3.5 text-xs bg-amber-500/10 border border-amber-500/20 text-amber-300 rounded-lg">
-            <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
+          <div className="flex items-center gap-2.5 p-3.5 text-xs bg-[#f99c00]/10 border border-[#f99c00]/20 text-[#f99c00] rounded-lg">
+            <AlertCircle className="w-4 h-4 shrink-0 text-[#f99c00]" />
             <span>Docker daemon unavailable: {dockerError}</span>
           </div>
         ) : (

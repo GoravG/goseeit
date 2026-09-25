@@ -98,19 +98,19 @@ export const HistoricalChart: React.FC = () => {
   }
 
   return (
-    <Card className="glass-panel border-white/5">
+    <Card className="glass-panel border-white/10">
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-sky-500/10 border border-sky-500/20 text-sky-400">
+            <div className="p-2 rounded-lg bg-[#2f5bff]/10 border border-[#2f5bff]/20 text-[#2f5bff]">
               <TrendingUp className="w-4 h-4" />
             </div>
             <div>
-              <CardTitle className="text-base font-semibold text-white">
+              <CardTitle className="text-base font-semibold text-[#ededed]">
                 Historical Telemetry & Metrics
               </CardTitle>
-              <div className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-                <History className="w-3 h-3 text-slate-500" />
+              <div className="text-xs text-[#969696] flex items-center gap-1.5 mt-0.5">
+                <History className="w-3 h-3 text-[#6d6d6d]" />
                 <span>Zero-footprint client persistence (Browser IndexedDB)</span>
               </div>
             </div>
@@ -119,47 +119,47 @@ export const HistoricalChart: React.FC = () => {
           {/* Controls toolbar */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Category tabs */}
-            <div className="flex items-center p-0.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs">
+            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/10 text-xs">
               <button
                 type="button"
                 onClick={() => setCategory('system')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-colors ${
                   category === 'system'
-                    ? 'bg-sky-500/20 text-sky-300 font-medium'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#2f5bff] text-white font-medium shadow-sm'
+                    : 'text-[#969696] hover:text-[#ededed] hover:bg-white/5'
                 }`}
               >
-                <Cpu className="w-3 h-3" />
+                <Cpu className="w-3.5 h-3.5" />
                 <span>CPU & RAM</span>
               </button>
               <button
                 type="button"
                 onClick={() => setCategory('network')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-colors ${
                   category === 'network'
-                    ? 'bg-sky-500/20 text-sky-300 font-medium'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#2f5bff] text-white font-medium shadow-sm'
+                    : 'text-[#969696] hover:text-[#ededed] hover:bg-white/5'
                 }`}
               >
-                <Network className="w-3 h-3" />
+                <Network className="w-3.5 h-3.5" />
                 <span>Network</span>
               </button>
               <button
                 type="button"
                 onClick={() => setCategory('disk')}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-md transition-colors ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-colors ${
                   category === 'disk'
-                    ? 'bg-sky-500/20 text-sky-300 font-medium'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#2f5bff] text-white font-medium shadow-sm'
+                    : 'text-[#969696] hover:text-[#ededed] hover:bg-white/5'
                 }`}
               >
-                <HardDrive className="w-3 h-3" />
+                <HardDrive className="w-3.5 h-3.5" />
                 <span>Disk I/O</span>
               </button>
             </div>
 
             {/* Time Window Buttons */}
-            <div className="flex items-center p-0.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs font-mono">
+            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/10 text-xs font-mono">
               {(
                 [
                   { label: '15m', val: 15 },
@@ -172,10 +172,10 @@ export const HistoricalChart: React.FC = () => {
                   key={val}
                   type="button"
                   onClick={() => setWindowMin(val)}
-                  className={`px-2 py-1 rounded-md transition-colors ${
+                  className={`px-2.5 py-1 rounded-md transition-colors ${
                     windowMin === val
-                      ? 'bg-primary text-primary-foreground font-semibold'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-[#2f5bff] text-white font-semibold shadow-sm'
+                      : 'text-[#969696] hover:text-[#ededed] hover:bg-white/5'
                   }`}
                 >
                   {label}
@@ -184,14 +184,14 @@ export const HistoricalChart: React.FC = () => {
             </div>
 
             {/* Area / Line Toggle */}
-            <div className="flex items-center p-0.5 rounded-lg bg-slate-900/80 border border-slate-800 text-xs">
+            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/10 text-xs">
               <button
                 type="button"
                 onClick={() => setChartType('area')}
-                className={`px-2 py-1 rounded-md transition-colors ${
+                className={`px-2.5 py-1 rounded-md transition-colors ${
                   chartType === 'area'
-                    ? 'bg-slate-700/80 text-white font-medium'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#2e2e2e] text-white font-medium'
+                    : 'text-[#969696] hover:text-[#ededed] hover:bg-white/5'
                 }`}
               >
                 Area
@@ -199,10 +199,10 @@ export const HistoricalChart: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setChartType('line')}
-                className={`px-2 py-1 rounded-md transition-colors ${
+                className={`px-2.5 py-1 rounded-md transition-colors ${
                   chartType === 'line'
-                    ? 'bg-slate-700/80 text-white font-medium'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-[#2e2e2e] text-white font-medium'
+                    : 'text-[#969696] hover:text-[#ededed] hover:bg-white/5'
                 }`}
               >
                 Line
