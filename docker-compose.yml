@@ -38,7 +38,7 @@ services:
       - HOST_SYS=/host/sys
 
       # Server port
-      - GOSEEIT_SERVER_PORT=8080
+      - GOSEEIT_SERVER_PORT=3333
 
       # Intel NUC disk mount points or devices to monitor (adjust as needed, e.g. /dev/nvme0n1, /dev/sda)
       - GOSEEIT_MONITOR_DISKS=/host/root,/dev/sda,/dev/nvme0n1
