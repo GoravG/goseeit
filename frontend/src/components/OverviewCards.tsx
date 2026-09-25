@@ -140,11 +140,10 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         icon={<Activity className="text-indigo-400" />}
         value={formatSpeed(totalNetBps)}
         delta={netDelta}
-        deltaLabel="combined I/O"
         trend={netTrend}
         className="glass-panel border-white/5 hover:border-indigo-500/40 transition-colors"
       >
-        <span className="text-slate-400">
+        <span className="text-slate-400 whitespace-nowrap text-xs">
           ↓ {formatSpeed(totalRx)} · ↑ {formatSpeed(totalTx)}
         </span>
       </KpiCard>

@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils"
 import { type NumberFormat } from "@/lib/format"
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -71,19 +70,21 @@ function KpiCard({
       className={cn("gap-4 py-5", className)}
       {...props}
     >
-      <CardHeader className="px-5">
-        <CardDescription className="flex items-center gap-1.5 [&>svg]:size-4">
-          {icon}
-          {label}
-        </CardDescription>
-        <CardTitle className="text-2xl font-semibold tabular-nums tracking-tight">
-          <MetricValue value={value} format={format} currency={currency} />
+      <CardHeader className="px-5 flex flex-col gap-2">
+        <div className="flex items-center justify-between gap-2 w-full">
+          <CardDescription className="flex items-center gap-1.5 text-xs text-muted-foreground truncate [&>svg]:size-4">
+            {icon}
+            <span className="truncate">{label}</span>
+          </CardDescription>
+          {delta !== undefined ? (
+            <div className="shrink-0">
+              <DeltaBadge delta={delta} invert={invertDelta} />
+            </div>
+          ) : null}
+        </div>
+        <CardTitle className="text-xl sm:text-2xl font-bold tabular-nums tracking-tight whitespace-nowrap overflow-hidden text-ellipsis">
+          <MetricValue value={value} format={format} currency={currency} className="whitespace-nowrap" />
         </CardTitle>
-        {delta !== undefined ? (
-          <CardAction>
-            <DeltaBadge delta={delta} invert={invertDelta} />
-          </CardAction>
-        ) : null}
       </CardHeader>
       {trend && trend.length > 1 ? (
         <CardContent className="px-5">
@@ -91,8 +92,8 @@ function KpiCard({
         </CardContent>
       ) : null}
       {deltaLabel || children ? (
-        <CardContent className="text-muted-foreground flex items-center gap-2 px-5 text-xs">
-          {deltaLabel ? <span>{deltaLabel}</span> : null}
+        <CardContent className="text-muted-foreground flex items-center justify-between gap-1.5 px-5 text-xs whitespace-nowrap overflow-hidden">
+          {deltaLabel ? <span className="truncate">{deltaLabel}</span> : null}
           {children}
         </CardContent>
       ) : null}

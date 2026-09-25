@@ -6,17 +6,18 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatBytes(bytes: number, decimals = 1): string {
-  if (!bytes || bytes === 0) return '0 B'
+  if (!bytes || bytes === 0) return '0\u00A0B'
   const k = 1024
   const dm = decimals < 0 ? 0 : decimals
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   const idx = Math.min(i, sizes.length - 1)
-  return `${parseFloat((bytes / Math.pow(k, idx)).toFixed(dm))} ${sizes[idx]}`
+  // Use non-breaking space (\u00A0) so values like "31 KB" never wrap onto two lines
+  return `${parseFloat((bytes / Math.pow(k, idx)).toFixed(dm))}\u00A0${sizes[idx]}`
 }
 
 export function formatSpeed(bytesPerSec: number): string {
-  if (!bytesPerSec || bytesPerSec === 0) return '0 B/s'
+  if (!bytesPerSec || bytesPerSec === 0) return '0\u00A0B/s'
   return `${formatBytes(bytesPerSec)}/s`
 }
 

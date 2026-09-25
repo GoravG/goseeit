@@ -37,7 +37,7 @@ function MetricValue({
   className,
   ...props
 }: MetricValueProps) {
-  const classes = cn("tabular-nums", className)
+  const classes = cn("tabular-nums whitespace-nowrap", className)
 
   if (typeof value !== "number") {
     return (
