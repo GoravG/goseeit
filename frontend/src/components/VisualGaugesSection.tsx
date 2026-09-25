@@ -53,7 +53,7 @@ export const VisualGaugesSection: React.FC<VisualGaugesSectionProps> = ({ snapsh
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
       {/* CPU Radial Gauge */}
-      <Card className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all flex flex-col justify-between">
+      <Card className="flex flex-col justify-between hover:border-white/20 transition-colors">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-medium text-[#ededed] flex items-center gap-2">
@@ -94,7 +94,7 @@ export const VisualGaugesSection: React.FC<VisualGaugesSectionProps> = ({ snapsh
       </Card>
 
       {/* Memory Capacity Radial Gauge */}
-      <Card className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all flex flex-col justify-between">
+      <Card className="flex flex-col justify-between hover:border-white/20 transition-colors">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-medium text-[#ededed] flex items-center gap-2">
@@ -135,7 +135,7 @@ export const VisualGaugesSection: React.FC<VisualGaugesSectionProps> = ({ snapsh
       </Card>
 
       {/* Storage Health Segmented Meter */}
-      <Card className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all flex flex-col justify-between">
+      <Card className="flex flex-col justify-between hover:border-white/20 transition-colors">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-medium text-[#ededed] flex items-center gap-2">
@@ -183,7 +183,7 @@ export const VisualGaugesSection: React.FC<VisualGaugesSectionProps> = ({ snapsh
       </Card>
 
       {/* System Load Ratio & Status Meter */}
-      <Card className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all flex flex-col justify-between">
+      <Card className="flex flex-col justify-between hover:border-white/20 transition-colors">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-sm font-medium text-[#ededed] flex items-center gap-2">

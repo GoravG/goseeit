@@ -1,5 +1,37 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-border: var(--border);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--border);
+  }
+}
+
 :root {
   --radius: 0.75rem;
 
@@ -39,7 +71,7 @@
   --foreground: var(--ink);
   --card: #212121;
   --card-foreground: var(--ink);
-  --card-border: rgba(237, 237, 237, 0.1);
+  --card-border: rgba(255, 255, 255, 0.06);
   --popover: #242424;
   --popover-foreground: var(--ink);
   --primary: #2f5bff;
@@ -52,8 +84,8 @@
   --accent-foreground: var(--ink);
   --destructive: #fb414a;
   --destructive-foreground: var(--color-red-400);
-  --border: rgba(237, 237, 237, 0.1);
-  --input: rgba(237, 237, 237, 0.14);
+  --border: rgba(255, 255, 255, 0.06);
+  --input: rgba(255, 255, 255, 0.08);
   --ring: #3ba6f1;
 
   /* Dashboardcn Chart Palette */
@@ -101,21 +133,21 @@ body {
 /* Dashboardcn Glass & Panel utilities */
 .glass-panel {
   background: #212121;
-  border: 1px solid rgba(237, 237, 237, 0.08);
-  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.75rem;
 }
 
 .glass-panel-subtle {
-  background: #26262a;
-  border: 1px solid rgba(237, 237, 237, 0.06);
-  border-radius: 0.625rem;
+  background: #1c1c1e;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 0.5rem;
 }
 
 /* Floating pill navbar in dashboardcn */
 .floating-pill-nav {
   background: rgba(36, 36, 36, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }

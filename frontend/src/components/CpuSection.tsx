@@ -17,7 +17,7 @@ export const CpuSection: React.FC<CpuSectionProps> = ({ cpu, host }) => {
   const load15 = host?.load_avg_15 ?? 0
 
   return (
-    <Card className="glass-panel border-white/10">
+    <Card>
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-2.5">
@@ -34,7 +34,7 @@ export const CpuSection: React.FC<CpuSectionProps> = ({ cpu, host }) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 text-xs bg-[#1c1c1e] px-3 py-1.5 rounded-lg border border-white/10">
+          <div className="flex items-center gap-2.5 text-xs bg-[#1c1c1e] px-3 py-1.5 rounded-lg border border-white/[0.06]">
             <Activity className="w-3.5 h-3.5 text-[#2f5bff]" />
             <span className="text-[#969696] font-medium">Load Avg:</span>
             <span className="font-mono text-[#ededed] font-semibold">{load1.toFixed(2)}</span>

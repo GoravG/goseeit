@@ -829,7 +829,7 @@ function DataTableContent<TData extends RowData>({
       data-slot="data-table-content"
       aria-busy={loading || pending || undefined}
       className={cn(
-        "relative overflow-hidden rounded-md border",
+        "relative overflow-hidden rounded-lg border border-white/[0.06]",
         "[&>[data-slot=table-container]]:[scrollbar-width:thin] [&>[data-slot=table-container]]:[scrollbar-color:color-mix(in_oklab,var(--foreground)_20%,transparent)_transparent]",
         maxHeight !== undefined &&
           "[&>[data-slot=table-container]]:max-h-[var(--data-table-max-height)]",

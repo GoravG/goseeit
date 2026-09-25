@@ -96,7 +96,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         delta={cpuDelta}
         invertDelta={true}
         trend={cpuTrend}
-        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
+        className="hover:border-white/20 transition-colors"
       >
         <span className="text-[#969696] font-mono text-xs">
           {snapshot?.cpu?.core_count ? `${snapshot.cpu.core_count} Cores` : 'Host CPU'}
@@ -111,7 +111,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         delta={memDelta}
         invertDelta={true}
         trend={memTrend}
-        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
+        className="hover:border-white/20 transition-colors"
       >
         <span className="text-[#969696] font-mono text-xs">
           {formatBytes(memUsedBytes)} / {formatBytes(memTotalBytes)}
@@ -125,7 +125,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         value={`${diskUsedPercent.toFixed(1)}%`}
         deltaLabel={primaryDisk ? primaryDisk.mount_point : '/'}
         trend={diskTrend}
-        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
+        className="hover:border-white/20 transition-colors"
       >
         <span className="text-[#969696] font-mono text-xs">
           {formatBytes(diskUsedBytes)} / {formatBytes(diskTotalBytes)}
@@ -139,7 +139,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         value={formatSpeed(totalNetBps)}
         delta={netDelta}
         trend={netTrend}
-        className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
+        className="hover:border-white/20 transition-colors"
       >
         <span className="text-[#969696] whitespace-nowrap text-xs font-mono">
           ↓ {formatSpeed(totalRx)} · ↑ {formatSpeed(totalTx)}
@@ -153,7 +153,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
           icon={<Zap className="text-[#ff2357]" />}
           value={`${gpuUsage.toFixed(1)}%`}
           trend={gpuTrend}
-          className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
+          className="hover:border-white/20 transition-colors"
         >
           <span className="text-[#969696] font-mono text-xs">
             {gpu?.cur_freq_mhz ? `${gpu.cur_freq_mhz} MHz` : 'Active DRM'}
@@ -166,7 +166,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
           value={formatUptime(snapshot?.host?.uptime_seconds ?? 0)}
           deltaLabel="active"
           trend={[1, 2, 3, 4, 5, 6, 7, 8]}
-          className="bg-[#212121] border-white/10 shadow-sm hover:border-white/20 transition-all"
+          className="hover:border-white/20 transition-colors"
         >
           <span className="text-[#969696] font-mono text-[11px] truncate">
             {snapshot?.host?.hostname ?? 'host'}

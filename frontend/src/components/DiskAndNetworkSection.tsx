@@ -23,7 +23,7 @@ export const DiskAndNetworkSection: React.FC<DiskAndNetworkProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {/* Storage & Disk Volumes */}
-      <Card className="glass-panel border-white/10">
+      <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -111,7 +111,7 @@ export const DiskAndNetworkSection: React.FC<DiskAndNetworkProps> = ({
       </Card>
 
       {/* Network Interfaces */}
-      <Card className="glass-panel border-white/10">
+      <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">

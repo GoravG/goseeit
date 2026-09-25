@@ -156,7 +156,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
   )
 
   return (
-    <Card className="glass-panel border-white/10">
+    <Card>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -174,7 +174,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           </div>
           <Badge
             variant="outline"
-            className="font-mono text-xs border-white/10 bg-[#1c1c1e] px-3 py-1"
+            className="font-mono text-xs border-white/[0.06] bg-[#1c1c1e] px-3 py-1"
           >
             <span className="text-[#00bb7f] font-bold mr-1">{runningCount}</span>
             <span className="text-[#969696]">/ {containers.length} Running</span>

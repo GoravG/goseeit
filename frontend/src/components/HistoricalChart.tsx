@@ -98,7 +98,7 @@ export const HistoricalChart: React.FC = () => {
   }
 
   return (
-    <Card className="glass-panel border-white/10">
+    <Card>
       <CardHeader className="pb-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-2.5">
@@ -119,7 +119,7 @@ export const HistoricalChart: React.FC = () => {
           {/* Controls toolbar */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Category tabs */}
-            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/10 text-xs">
+            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/[0.06] text-xs">
               <button
                 type="button"
                 onClick={() => setCategory('system')}
@@ -159,7 +159,7 @@ export const HistoricalChart: React.FC = () => {
             </div>
 
             {/* Time Window Buttons */}
-            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/10 text-xs font-mono">
+            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/[0.06] text-xs font-mono">
               {(
                 [
                   { label: '15m', val: 15 },
@@ -184,7 +184,7 @@ export const HistoricalChart: React.FC = () => {
             </div>
 
             {/* Area / Line Toggle */}
-            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/10 text-xs">
+            <div className="flex items-center p-0.5 rounded-lg bg-[#1c1c1e] border border-white/[0.06] text-xs">
               <button
                 type="button"
                 onClick={() => setChartType('area')}
