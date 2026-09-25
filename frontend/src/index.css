@@ -1,18 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090d16;
+  --background: #080c14;
   --foreground: #f8fafc;
   --card: #0f172a;
   --card-foreground: #f8fafc;
-  --card-border: #1e293b;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --popover: #0f172a;
+  --popover-foreground: #f8fafc;
   --primary: #38bdf8;
-  --primary-foreground: #090d16;
-  --muted: #64748b;
+  --primary-foreground: #080c14;
+  --secondary: #1e293b;
+  --secondary-foreground: #f8fafc;
+  --muted: #1e293b;
   --muted-foreground: #94a3b8;
   --accent: #1e293b;
-  --border: #1e293b;
-  --radius: 0.75rem;
+  --accent-foreground: #f8fafc;
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #38bdf8;
+  --radius: 0.875rem;
+
+  /* Dashboardcn Chart Palette */
+  --chart-1: #38bdf8; /* sky */
+  --chart-2: #10b981; /* emerald */
+  --chart-3: #f59e0b; /* amber */
+  --chart-4: #818cf8; /* indigo */
+  --chart-5: #ec4899; /* pink */
+
+  /* Color aliases for dashboardcn */
+  --color-sky-500: #0ea5e9;
+  --color-emerald-500: #10b981;
+  --color-amber-500: #f59e0b;
+  --color-red-500: #ef4444;
+  --color-indigo-500: #6366f1;
 }
 
 body {
@@ -32,7 +55,7 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: #080c14;
 }
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
@@ -42,17 +65,17 @@ body {
   background: #334155;
 }
 
-/* Glassmorphism card utility */
+/* Glassmorphism utilities */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.875rem;
 }
 
 .glass-panel-subtle {
-  background: rgba(30, 41, 59, 0.4);
+  background: rgba(22, 32, 50, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0.625rem;
 }
