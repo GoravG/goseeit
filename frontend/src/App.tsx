@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Server, Wifi, WifiOff, ShieldCheck, Clock } from 'lucide-react'
+import { Wifi, WifiOff, ShieldCheck, Clock } from 'lucide-react'
+import { GoseeitIcon } from '@/components/ui/GoseeitIcon'
 import { wsClient } from '@/lib/websocket'
 import { formatUptime } from '@/lib/utils'
 import { OverviewCards } from '@/components/OverviewCards'
@@ -50,9 +51,7 @@ export function App() {
           <div className="relative mx-auto flex h-12 w-full max-w-7xl items-center justify-between rounded-full floating-pill-nav px-4 sm:px-5">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="size-7 rounded-lg bg-[#2f5bff] flex items-center justify-center text-white shadow-sm shadow-[#2f5bff]/30">
-                  <Server className="size-4 stroke-[2.2]" />
-                </div>
+                <GoseeitIcon size={30} className="rounded-lg shadow-sm shadow-[#2f5bff]/20 transition-transform hover:scale-105" />
                 <div className="flex items-baseline gap-2">
                   <span className="font-semibold text-base tracking-tight text-white">
                     goseeit
