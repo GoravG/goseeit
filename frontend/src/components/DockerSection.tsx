@@ -25,6 +25,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
     () =>
       helper.columns([
         helper.accessor('name', {
+          meta: { label: 'Container' },
           header: ({ column }) => <DataTableColumnHeader column={column} title="Container" />,
           cell: ({ row }) => {
             const c = row.original
@@ -53,6 +54,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           },
         }),
         helper.accessor('state', {
+          meta: { label: 'Status' },
           header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
           cell: ({ row }) => {
             const state = row.original.state
@@ -85,6 +87,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           },
         }),
         helper.accessor('image', {
+          meta: { label: 'Image' },
           header: ({ column }) => <DataTableColumnHeader column={column} title="Image" />,
           cell: ({ row }) => (
             <div className="font-mono text-xs text-[#c2c2c2] truncate max-w-[180px]">
@@ -93,6 +96,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           ),
         }),
         helper.accessor('cpu_percent', {
+          meta: { label: 'CPU %' },
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title="CPU %" align="right" />
           ),
@@ -119,6 +123,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           },
         }),
         helper.accessor('memory_used_bytes', {
+          meta: { label: 'Memory' },
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Memory" align="right" />
           ),
@@ -137,6 +142,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           },
         }),
         helper.accessor('net_rx_bytes', {
+          meta: { label: 'Network I/O' },
           header: ({ column }) => (
             <DataTableColumnHeader column={column} title="Network I/O" align="right" />
           ),

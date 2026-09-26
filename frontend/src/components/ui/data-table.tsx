@@ -434,6 +434,23 @@ interface DataTableViewOptionsProps<TData extends RowData>
   className?: string
 }
 
+const COLUMN_LABEL_FALLBACKS: Record<string, string> = {
+  cpu_percent: "CPU %",
+  memory_used_bytes: "Memory",
+  net_rx_bytes: "Network I/O",
+  name: "Container",
+  state: "Status",
+  image: "Image",
+}
+
+function getColumnTitle(column: { id: string; columnDef: { meta?: unknown; header?: unknown } }): string {
+  const meta = column.columnDef.meta as { label?: string; title?: string } | undefined
+  if (meta?.label) return meta.label
+  if (meta?.title) return meta.title
+  if (COLUMN_LABEL_FALLBACKS[column.id]) return COLUMN_LABEL_FALLBACKS[column.id]
+  return column.id.replace(/[_-]/g, " ")
+}
+
 /** Column visibility, and column order when reordering is on. */
 function DataTableViewOptions<TData extends RowData>({
   table,
@@ -462,11 +479,10 @@ function DataTableViewOptions<TData extends RowData>({
         {columns.map((column) => (
           <DropdownMenuCheckboxItem
             key={column.id}
-            className="capitalize"
             checked={column.getIsVisible()}
             onCheckedChange={(value: boolean | "indeterminate") => column.toggleVisibility(!!value)}
           >
-            {column.id}
+            {getColumnTitle(column)}
           </DropdownMenuCheckboxItem>
         ))}
         {reorderable ? (
