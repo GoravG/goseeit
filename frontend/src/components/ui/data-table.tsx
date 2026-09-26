@@ -7,7 +7,6 @@ import {
   columnPinningFeature,
   columnSizingFeature,
   columnVisibilityFeature,
-  createColumnHelper,
   createFilteredRowModel,
   createPaginatedRowModel,
   createSortedRowModel,
@@ -49,7 +48,6 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -118,11 +116,6 @@ type DataTableColumn<TData extends RowData> = Column<
 >
 
 type DataTableRow<TData extends RowData> = Row<DataTableFeatures, TData>
-
-/** Typed column helper bound to the data table's feature set. */
-function createDataTableColumnHelper<TData extends RowData>() {
-  return createColumnHelper<DataTableFeatures, TData>()
-}
 
 /** Row density presets. Only the cell padding changes. */
 type DataTableDensity = "compact" | "default" | "relaxed"
@@ -550,50 +543,6 @@ function DataTableColumnHeader<TData extends RowData, TValue>({
 /* -------------------------------------------------------------------------- */
 /*                                  selection                                 */
 /* -------------------------------------------------------------------------- */
-
-/**
- * A checkbox column. Put it first in your column list and give the table a
- * `getRowId` so the selection survives sorting and paging.
- */
-function createSelectionColumn<TData extends RowData>(
-  overrides?: Partial<DataTableColumnDef<TData>>
-): DataTableColumnDef<TData> {
-  return {
-    id: "select",
-    size: 36,
-    enableSorting: false,
-    enableHiding: false,
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected()
-            ? true
-            : table.getIsSomePageRowsSelected()
-              ? "indeterminate"
-              : false
-        }
-        onCheckedChange={(value: boolean | "indeterminate") => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all rows on this page"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        disabled={!row.getCanSelect()}
-        // The handler wants the checkbox's next value and the shift key, which
-        // is what turns a click into a range selection.
-        onClick={(event: React.MouseEvent) =>
-          row.getToggleSelectedHandler()({
-            target: { checked: !row.getIsSelected() },
-            shiftKey: event.shiftKey,
-          })
-        }
-        aria-label="Select row"
-      />
-    ),
-    ...overrides,
-  } as DataTableColumnDef<TData>
-}
 
 interface DataTableSelectionBarProps<TData extends RowData>
   extends React.ComponentProps<"div"> {
@@ -1192,15 +1141,10 @@ export {
   DataTableSkeleton,
   DataTableToolbar,
   DataTableViewOptions,
-  createDataTableColumnHelper,
-  createSelectionColumn,
-  dataTableFeatures,
-  moveColumn,
-  shiftColumn,
-  useDataTable,
   type DataTableColumnDef,
   type DataTableDensity,
   type DataTableFeatures,
   type DataTableInstance,
   type DataTableRow,
 }
+

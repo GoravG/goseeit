@@ -46,7 +46,9 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
   const gpuAvailable = gpu?.available ?? false
   const gpuUsage = gpu?.usage_percent ?? 0
 
-  // Update rolling history buffer when a new snapshot arrives
+  const [deltas, setDeltas] = useState<{ cpu?: number; mem?: number; net?: number }>({})
+
+  // Update rolling history buffer and deltas when a new snapshot arrives
   useEffect(() => {
     if (!snapshot) return
 
@@ -73,18 +75,17 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
     if (gpuAvailable) {
       setGpuTrend((prev) => [...prev.slice(-(HISTORY_SIZE - 1)), Math.round(gpuUsage)])
     }
-  }, [snapshot?.timestamp])
 
-  // Calculate short-term deltas
-  const cpuDelta = prevCpuRef.current > 0 ? (cpuPercent - prevCpuRef.current) / 100 : undefined
-  const memDelta = prevMemRef.current > 0 ? (memUsedPercent - prevMemRef.current) / 100 : undefined
-  const netDelta = prevNetRef.current > 0 && totalNetBps > 0 ? (totalNetBps - prevNetRef.current) / prevNetRef.current : undefined
+    setDeltas({
+      cpu: prevCpuRef.current > 0 ? (cpuPercent - prevCpuRef.current) / 100 : undefined,
+      mem: prevMemRef.current > 0 ? (memUsedPercent - prevMemRef.current) / 100 : undefined,
+      net: prevNetRef.current > 0 && totalNetBps > 0 ? (totalNetBps - prevNetRef.current) / prevNetRef.current : undefined,
+    })
 
-  useEffect(() => {
     if (cpuPercent > 0) prevCpuRef.current = cpuPercent
     if (memUsedPercent > 0) prevMemRef.current = memUsedPercent
     if (totalNetBps > 0) prevNetRef.current = totalNetBps
-  }, [cpuPercent, memUsedPercent, totalNetBps])
+  }, [snapshot, cpuPercent, memUsedPercent, totalNetBps, primaryDisk, gpuAvailable, gpuUsage])
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
@@ -93,7 +94,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         label="CPU Utilization"
         icon={<Cpu className="text-[#2f5bff]" />}
         value={`${cpuPercent.toFixed(1)}%`}
-        delta={cpuDelta}
+        delta={deltas.cpu}
         invertDelta={true}
         trend={cpuTrend}
         className="hover:border-white/20 transition-colors"
@@ -108,7 +109,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         label="Memory In Use"
         icon={<MemoryStick className="text-[#00bb7f]" />}
         value={`${memUsedPercent.toFixed(1)}%`}
-        delta={memDelta}
+        delta={deltas.mem}
         invertDelta={true}
         trend={memTrend}
         className="hover:border-white/20 transition-colors"
@@ -137,7 +138,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
         label="Network Traffic"
         icon={<Activity className="text-[#ac4bff]" />}
         value={formatSpeed(totalNetBps)}
-        delta={netDelta}
+        delta={deltas.net}
         trend={netTrend}
         className="hover:border-white/20 transition-colors"
       >

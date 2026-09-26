@@ -33,3 +33,11 @@ export function formatUptime(seconds: number): string {
   parts.push(`${minutes}m`)
   return parts.join(' ')
 }
+
+export type DeltaDirection = 'up' | 'down' | 'flat'
+
+export function getDeltaDirection(delta: number | undefined): DeltaDirection {
+  if (delta === undefined || delta === 0 || !Number.isFinite(delta)) return 'flat'
+  return delta > 0 ? 'up' : 'down'
+}
+

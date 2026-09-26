@@ -3,11 +3,8 @@ import { Box, AlertCircle, Play, Square, Pause } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import {
-  DataTable,
-  DataTableColumnHeader,
-  createDataTableColumnHelper,
-} from '@/components/ui/data-table'
+import { DataTable, DataTableColumnHeader } from '@/components/ui/data-table'
+import { createDataTableColumnHelper } from '@/components/ui/data-table-helper'
 import { formatBytes } from '@/lib/utils'
 import type { ContainerMetric } from '@/types/metrics'
 

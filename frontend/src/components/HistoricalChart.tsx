@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { History, TrendingUp, Cpu, Network, HardDrive } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { TrendChart, type TrendSeries } from '@/components/ui/trend-chart'
@@ -14,29 +14,29 @@ export const HistoricalChart: React.FC = () => {
   const [category, setCategory] = useState<Category>('system')
   const [chartType, setChartType] = useState<'area' | 'line'>('area')
   const [rawPoints, setRawPoints] = useState<HistoricalMetricPoint[]>([])
+  const [initialTime] = useState(() => Date.now())
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const points = await db.getAggregatedPoints(windowMin, 50)
       setRawPoints(points)
     } catch (e) {
       console.error('Failed to load historical points from IndexedDB', e)
     }
-  }
+  }, [windowMin])
 
   useEffect(() => {
     fetchData()
     const interval = setInterval(fetchData, 3000)
     return () => clearInterval(interval)
-  }, [windowMin])
+  }, [fetchData])
 
   // Transform raw points for TrendChart
   const chartData = useMemo(() => {
     if (rawPoints.length === 0) {
       // Provide dummy fallback points so chart renders gracefully on initial load
-      const now = Date.now()
       return Array.from({ length: 10 }, (_, i) => {
-        const t = new Date(now - (9 - i) * 60000)
+        const t = new Date(initialTime - (9 - i) * 60000)
         return {
           time: t.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
           cpu: 0,
@@ -67,7 +67,7 @@ export const HistoricalChart: React.FC = () => {
         write: Math.round(p.disk_write_bps / 1024), // KB/s
       }
     })
-  }, [rawPoints, windowMin])
+  }, [rawPoints, windowMin, initialTime])
 
   // Dynamic series configuration
   const series: TrendSeries[] = useMemo(() => {

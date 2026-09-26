@@ -1,15 +1,8 @@
 import * as React from "react"
 import { Minus, TrendingDown, TrendingUp } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn, getDeltaDirection, type DeltaDirection } from "@/lib/utils"
 import { formatDelta } from "@/lib/format"
-
-export type DeltaDirection = "up" | "down" | "flat"
-
-export function getDeltaDirection(delta: number | undefined): DeltaDirection {
-  if (delta === undefined || delta === 0 || !Number.isFinite(delta)) return "flat"
-  return delta > 0 ? "up" : "down"
-}
 
 const directionIcon: Record<DeltaDirection, React.ElementType> = {
   up: TrendingUp,

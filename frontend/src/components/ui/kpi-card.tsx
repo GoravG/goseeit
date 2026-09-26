@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
+import { cn, getDeltaDirection } from "@/lib/utils"
 import { type NumberFormat } from "@/lib/format"
 import {
   Card,
@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { DeltaBadge, getDeltaDirection } from "@/components/ui/delta-badge"
+import { DeltaBadge } from "@/components/ui/delta-badge"
 import { Sparkline } from "@/components/ui/sparkline"
 import { MetricValue } from "@/components/ui/metric-value"
 

@@ -59,7 +59,7 @@ func (m *Manager) CollectAll(ctx context.Context) *model.SystemSnapshot {
 	}
 
 	// Fan-out: Collect all metrics concurrently with concrete types
-	runCollector("host", func() {
+	runCollector(m.hostCollector.Name(), func() {
 		h, err := m.hostCollector.Collect(ctx)
 		if err == nil && h != nil {
 			mu.Lock()
@@ -68,7 +68,7 @@ func (m *Manager) CollectAll(ctx context.Context) *model.SystemSnapshot {
 		}
 	})
 
-	runCollector("cpu", func() {
+	runCollector(m.cpuCollector.Name(), func() {
 		c, err := m.cpuCollector.Collect(ctx)
 		if err == nil && c != nil {
 			mu.Lock()
@@ -77,7 +77,7 @@ func (m *Manager) CollectAll(ctx context.Context) *model.SystemSnapshot {
 		}
 	})
 
-	runCollector("memory", func() {
+	runCollector(m.memoryCollector.Name(), func() {
 		mem, err := m.memoryCollector.Collect(ctx)
 		if err == nil && mem != nil {
 			mu.Lock()
@@ -86,7 +86,7 @@ func (m *Manager) CollectAll(ctx context.Context) *model.SystemSnapshot {
 		}
 	})
 
-	runCollector("disk", func() {
+	runCollector(m.diskCollector.Name(), func() {
 		disks, err := m.diskCollector.Collect(ctx)
 		if err == nil && disks != nil {
 			mu.Lock()
@@ -95,7 +95,7 @@ func (m *Manager) CollectAll(ctx context.Context) *model.SystemSnapshot {
 		}
 	})
 
-	runCollector("network", func() {
+	runCollector(m.networkCollector.Name(), func() {
 		networks, err := m.networkCollector.Collect(ctx)
 		if err == nil && networks != nil {
 			mu.Lock()
@@ -104,7 +104,7 @@ func (m *Manager) CollectAll(ctx context.Context) *model.SystemSnapshot {
 		}
 	})
 
-	runCollector("gpu", func() {
+	runCollector(m.gpuCollector.Name(), func() {
 		gpu, err := m.gpuCollector.Collect(ctx)
 		if err == nil && gpu != nil {
 			mu.Lock()
@@ -113,7 +113,7 @@ func (m *Manager) CollectAll(ctx context.Context) *model.SystemSnapshot {
 		}
 	})
 
-	runCollector("docker", func() {
+	runCollector(m.dockerCollector.Name(), func() {
 		res, err := m.dockerCollector.Collect(ctx)
 		if err == nil {
 			mu.Lock()
