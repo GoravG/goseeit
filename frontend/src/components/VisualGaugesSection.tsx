@@ -110,14 +110,14 @@ export const VisualGaugesSection: React.FC<VisualGaugesSectionProps> = ({ snapsh
           <RadialGauge
             value={memUsedPercent}
             size={160}
-            thickness={10}
-            sweep={240}
-            startAngle={240}
+            thickness={12}
+            segments={28}
+            sweep={180}
             color={getMemColor(memUsedPercent)}
             trackColor="#2a2a2a"
           >
-            <div className="flex flex-col items-center justify-center">
-              <span className="text-3xl font-bold font-mono tracking-tight text-[#00bb7f]">
+            <div className="flex flex-col items-center justify-center mt-2">
+              <span className="text-3xl font-bold font-mono tracking-tight text-white">
                 {memUsedPercent.toFixed(1)}%
               </span>
               <span className="text-[10px] text-[#969696] font-mono uppercase tracking-wider">
@@ -127,7 +127,7 @@ export const VisualGaugesSection: React.FC<VisualGaugesSectionProps> = ({ snapsh
           </RadialGauge>
           <div className="w-full mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-[#969696]">
             <span>Available:</span>
-            <span className="text-[#00bb7f] font-mono font-medium">
+            <span className="text-[#ededed] font-mono font-medium">
               {formatBytes(memFreeBytes)} Free
             </span>
           </div>
