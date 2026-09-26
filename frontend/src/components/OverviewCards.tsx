@@ -153,6 +153,7 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ snapshot }) => {
           icon={<Zap className="text-[#ff2357]" />}
           value={`${gpuUsage.toFixed(1)}%`}
           trend={gpuTrend}
+          deltaLabel={snapshot?.host ? `Up: ${formatUptime(snapshot.host.uptime_seconds)}` : undefined}
           className="hover:border-white/20 transition-colors"
         >
           <span className="text-[#969696] font-mono text-xs">

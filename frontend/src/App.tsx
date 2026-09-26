@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Server, Wifi, WifiOff, ShieldCheck } from 'lucide-react'
+import { Server, Wifi, WifiOff, ShieldCheck, Clock } from 'lucide-react'
 import { wsClient } from '@/lib/websocket'
+import { formatUptime } from '@/lib/utils'
 import { OverviewCards } from '@/components/OverviewCards'
 import { VisualGaugesSection } from '@/components/VisualGaugesSection'
 import { HistoricalChart } from '@/components/HistoricalChart'
@@ -73,6 +74,14 @@ export function App() {
 
             {/* Quick status pill badges */}
             <div className="flex items-center gap-2 sm:gap-3">
+              {host && (
+                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2a2a2a] border border-white/10 text-xs font-mono text-[#969696]">
+                  <Clock className="size-3.5 text-[#00bb7f]" />
+                  <span>Up:</span>
+                  <span className="text-[#ededed] font-semibold">{formatUptime(host.uptime_seconds)}</span>
+                </div>
+              )}
+
               {host && (
                 <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2a2a2a] border border-white/10 text-xs font-mono text-[#969696]">
                   <ShieldCheck className="size-3.5 text-[#00bb7f]" />

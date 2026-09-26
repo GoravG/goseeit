@@ -1,7 +1,8 @@
 import React from 'react'
-import { Cpu, Activity } from 'lucide-react'
+import { Cpu, Activity, Clock } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { formatUptime } from '@/lib/utils'
 import type { CPUStats, HostInfo } from '@/types/metrics'
 
 interface CpuSectionProps {
@@ -34,14 +35,26 @@ export const CpuSection: React.FC<CpuSectionProps> = ({ cpu, host }) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5 text-xs bg-[#1c1c1e] px-3 py-1.5 rounded-lg border border-white/[0.06]">
-            <Activity className="w-3.5 h-3.5 text-[#2f5bff]" />
-            <span className="text-[#969696] font-medium">Load Avg:</span>
-            <span className="font-mono text-[#ededed] font-semibold">{load1.toFixed(2)}</span>
-            <span className="text-[#4e4e4e]">/</span>
-            <span className="font-mono text-[#c2c2c2]">{load5.toFixed(2)}</span>
-            <span className="text-[#4e4e4e]">/</span>
-            <span className="font-mono text-[#969696]">{load15.toFixed(2)}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            {host?.uptime_seconds ? (
+              <div className="flex items-center gap-1.5 text-xs bg-[#1c1c1e] px-3 py-1.5 rounded-lg border border-white/[0.06]">
+                <Clock className="w-3.5 h-3.5 text-[#00bb7f]" />
+                <span className="text-[#969696] font-medium">Uptime:</span>
+                <span className="font-mono text-[#ededed] font-semibold">
+                  {formatUptime(host.uptime_seconds)}
+                </span>
+              </div>
+            ) : null}
+
+            <div className="flex items-center gap-2.5 text-xs bg-[#1c1c1e] px-3 py-1.5 rounded-lg border border-white/[0.06]">
+              <Activity className="w-3.5 h-3.5 text-[#2f5bff]" />
+              <span className="text-[#969696] font-medium">Load Avg:</span>
+              <span className="font-mono text-[#ededed] font-semibold">{load1.toFixed(2)}</span>
+              <span className="text-[#4e4e4e]">/</span>
+              <span className="font-mono text-[#c2c2c2]">{load5.toFixed(2)}</span>
+              <span className="text-[#4e4e4e]">/</span>
+              <span className="font-mono text-[#969696]">{load15.toFixed(2)}</span>
+            </div>
           </div>
         </div>
       </CardHeader>
