@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/icon.png" alt="goseeit icon" width="112" height="112" />
+  <img src="assets/icon.svg" alt="goseeit icon" width="112" height="112" />
 </p>
 
 <h1 align="center">goseeit</h1>
@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/goravg/goseeit/actions"><img src="https://img.shields.io/github/actions/workflow/status/goravg/goseeit/release.yaml?style=flat-square&logo=github&label=build" alt="Build Status" /></a>
+  <a href="https://github.com/goravg/goseeit/actions"><img src="https://img.shields.io/github/actions/workflow/status/goravg/goseeit/ci.yml?branch=main&style=flat-square&logo=github&label=build" alt="Build Status" /></a>
   <a href="https://github.com/goravg/goseeit/releases"><img src="https://img.shields.io/github/v/release/goravg/goseeit?style=flat-square&color=blue" alt="Latest Release" /></a>
   <a href="https://hub.docker.com/r/goravg/goseeit"><img src="https://img.shields.io/docker/pulls/goravg/goseeit?style=flat-square&logo=docker" alt="Docker Pulls" /></a>
   <img src="https://img.shields.io/badge/container%20size-~14.4%20MB-emerald?style=flat-square" alt="Container Size" />
