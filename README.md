@@ -16,6 +16,10 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-purple?style=flat-square" alt="License" /></a>
 </p>
 
+<p align="center">
+  <img src="assets/screenshot.png" alt="goseeit Dashboard Preview" width="100%" />
+</p>
+
 ---
 
 ## Overview
