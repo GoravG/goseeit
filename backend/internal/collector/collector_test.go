@@ -122,3 +122,48 @@ func TestManagerCollectAll(t *testing.T) {
 		t.Error("expected non-nil Memory stats in snapshot")
 	}
 }
+
+func TestDockerCalculateCPUPercent(t *testing.T) {
+	now := time.Now()
+
+	// 1. First tick with no pre-stats: returns 0.0
+	percent := calculateCPUPercent(1000000000, 4000000000, now, containerPrevStats{}, false, 4, 0, 0)
+	if percent != 0.0 {
+		t.Errorf("expected 0.0 on first sample, got %v", percent)
+	}
+
+	// 2. Second tick with valid system and container usage (1 core fully used over interval on 4-core machine)
+	// Container used 1 sec (1e9 ns), Host total system advanced by 4 sec (4e9 ns) across 4 cores
+	prev := containerPrevStats{
+		totalUsage:  1000000000,
+		systemUsage: 4000000000,
+		time:        now.Add(-1 * time.Second),
+	}
+	// Container now at 2e9 ns, host at 8e9 ns
+	percent = calculateCPUPercent(2000000000, 8000000000, now, prev, true, 4, 0, 0)
+	// (1e9 / 4e9) * 4 * 100 = 100.0%
+	if percent != 100.0 {
+		t.Errorf("expected 100.0%%, got %v", percent)
+	}
+
+	// 3. Wall-clock fallback when systemUsage is 0 (e.g. cgroup v2 system_cpu_usage missing)
+	prevZeroSys := containerPrevStats{
+		totalUsage:  1000000000,
+		systemUsage: 0,
+		time:        now.Add(-2 * time.Second),
+	}
+	// Container used 1 second of CPU over 2 seconds of elapsed wall time
+	percent = calculateCPUPercent(2000000000, 0, now, prevZeroSys, true, 4, 0, 0)
+	// cpuDelta = 1e9, elapsedNs = 2e9, systemDelta = 2e9 * 4 = 8e9
+	// (1e9 / 8e9) * 4 * 100 = 50.0%
+	if percent != 50.0 {
+		t.Errorf("expected 50.0%% with wall-clock fallback, got %v", percent)
+	}
+
+	// 4. Counter decrease (container restart)
+	percent = calculateCPUPercent(500000, 9000000000, now, prev, true, 4, 0, 0)
+	if percent != 0.0 {
+		t.Errorf("expected 0.0 on counter reset, got %v", percent)
+	}
+}
+

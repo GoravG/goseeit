@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -14,18 +15,27 @@ import (
 	"github.com/goravg/goseeit/internal/model"
 )
 
+type containerPrevStats struct {
+	totalUsage  uint64
+	systemUsage uint64
+	time        time.Time
+}
+
 // DockerCollector gathers container statuses and resource metrics.
 type DockerCollector struct {
-	enabled    bool
-	socketPath string
-	client     *client.Client
-	mu         sync.Mutex
+	enabled     bool
+	socketPath  string
+	client      *client.Client
+	mu          sync.Mutex
+	prevStats   map[string]containerPrevStats
+	prevStatsMu sync.Mutex
 }
 
 type dockerStatsPayload struct {
 	CPUStats struct {
 		CPUUsage struct {
-			TotalUsage uint64 `json:"total_usage"`
+			TotalUsage  uint64   `json:"total_usage"`
+			PercpuUsage []uint64 `json:"percpu_usage"`
 		} `json:"cpu_usage"`
 		SystemCPUUsage uint64 `json:"system_cpu_usage"`
 		OnlineCPUs     uint32 `json:"online_cpus"`
@@ -55,6 +65,7 @@ func NewDockerCollector(socketPath string, enabled bool) *DockerCollector {
 	d := &DockerCollector{
 		enabled:    enabled,
 		socketPath: socketPath,
+		prevStats:  make(map[string]containerPrevStats),
 	}
 	d.initClient()
 	return d
@@ -83,6 +94,41 @@ func (d *DockerCollector) Name() string {
 type DockerResult struct {
 	Containers []model.ContainerMetric
 	Error      string
+}
+
+// calculateCPUPercent calculates real-time CPU percentage between measurements.
+func calculateCPUPercent(
+	currentTotal uint64,
+	currentSystem uint64,
+	now time.Time,
+	prev containerPrevStats,
+	hasPrev bool,
+	onlineCPUs float64,
+	dockerPreCPU uint64,
+	dockerPreSystem uint64,
+) float64 {
+	var cpuDelta float64
+	var systemDelta float64
+
+	if hasPrev {
+		cpuDelta = float64(currentTotal) - float64(prev.totalUsage)
+		if currentSystem > 0 && prev.systemUsage > 0 && currentSystem > prev.systemUsage {
+			systemDelta = float64(currentSystem) - float64(prev.systemUsage)
+		} else {
+			elapsedNs := float64(now.Sub(prev.time).Nanoseconds())
+			if elapsedNs > 0 {
+				systemDelta = elapsedNs * onlineCPUs
+			}
+		}
+	} else if dockerPreCPU > 0 && dockerPreSystem > 0 && currentSystem > dockerPreSystem {
+		cpuDelta = float64(currentTotal) - float64(dockerPreCPU)
+		systemDelta = float64(currentSystem) - float64(dockerPreSystem)
+	}
+
+	if systemDelta > 0 && cpuDelta > 0 {
+		return math.Round(((cpuDelta/systemDelta)*onlineCPUs*100.0)*10) / 10
+	}
+	return 0.0
 }
 
 // Collect inspects active Docker containers.
@@ -153,18 +199,37 @@ func (d *DockerCollector) Collect(ctx context.Context) (DockerResult, error) {
 					return
 				}
 
-				// Calculate CPU %
-				cpuDelta := float64(payload.CPUStats.CPUUsage.TotalUsage) - float64(payload.PreCPUStats.CPUUsage.TotalUsage)
-				systemDelta := float64(payload.CPUStats.SystemCPUUsage) - float64(payload.PreCPUStats.SystemCPUUsage)
+				now := time.Now()
+				currentTotal := payload.CPUStats.CPUUsage.TotalUsage
+				currentSystem := payload.CPUStats.SystemCPUUsage
+
 				onlineCPUs := float64(payload.CPUStats.OnlineCPUs)
 				if onlineCPUs == 0 {
-					onlineCPUs = 1
+					onlineCPUs = float64(len(payload.CPUStats.CPUUsage.PercpuUsage))
+				}
+				if onlineCPUs == 0 {
+					onlineCPUs = float64(runtime.NumCPU())
 				}
 
-				var cpuPercent float64
-				if systemDelta > 0 && cpuDelta > 0 {
-					cpuPercent = math.Round(((cpuDelta/systemDelta)*onlineCPUs*100.0)*10) / 10
+				d.prevStatsMu.Lock()
+				prev, hasPrev := d.prevStats[cID]
+				d.prevStats[cID] = containerPrevStats{
+					totalUsage:  currentTotal,
+					systemUsage: currentSystem,
+					time:        now,
 				}
+				d.prevStatsMu.Unlock()
+
+				cpuPercent := calculateCPUPercent(
+					currentTotal,
+					currentSystem,
+					now,
+					prev,
+					hasPrev,
+					onlineCPUs,
+					payload.PreCPUStats.CPUUsage.TotalUsage,
+					payload.PreCPUStats.SystemCPUUsage,
+				)
 
 				// Calculate Memory usage (subtract inactive_file cache if present)
 				memUsage := payload.MemoryStats.Usage
@@ -195,6 +260,22 @@ func (d *DockerCollector) Collect(ctx context.Context) (DockerResult, error) {
 	}
 
 	wg.Wait()
+
+	// Prune stopped or removed containers from prevStats cache
+	activeIDs := make(map[string]struct{}, len(containers))
+	for _, c := range containers {
+		if c.State == "running" {
+			activeIDs[c.ID] = struct{}{}
+		}
+	}
+	d.prevStatsMu.Lock()
+	for id := range d.prevStats {
+		if _, active := activeIDs[id]; !active {
+			delete(d.prevStats, id)
+		}
+	}
+	d.prevStatsMu.Unlock()
+
 	return DockerResult{Containers: results}, nil
 }
 
@@ -204,3 +285,4 @@ func min(a, b int) int {
 	}
 	return b
 }
+
