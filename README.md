@@ -36,7 +36,7 @@ Built with **idiomatic Go** and a modern **React + Tailwind + shadcn/ui** fronte
 - **Single Executable Deployment**: The web dashboard is embedded directly into the Go binary. Deploying outside Docker is as simple as copying a single `~13 MB` binary to your server.
 - **Zero Server Database Overhead**: Historical metrics are persisted and aggregated in browser **IndexedDB (Dexie.js)**, offering 15m, 1h, 6h, and 24h interactive charts with zero server RAM or disk database footprint.
 - **Real-Time Streaming**: High-throughput, non-blocking WebSocket Hub streams system snapshots to connected browser clients every 1.5 seconds.
-- **Docker Container Inspection**: Connects to the local Docker socket (`/var/run/docker.sock`) to monitor container state, CPU %, RAM, and network I/O.
+- **Docker Container Inspection & Web UI Redirection**: Connects to the local Docker socket (`/var/run/docker.sock`) to monitor container state, CPU %, RAM, and network I/O. Supports custom web UI redirect links via container label (`goseeit.url`).
 - **Comprehensive Hardware Metrics**:
   - **CPU**: Total utilization, per-core breakdown, CPU model, and 1m / 5m / 15m load averages.
   - **Memory & Swap**: RAM used, free, and available alongside swap space.
@@ -165,6 +165,36 @@ All YAML settings can be overridden via environment variables:
 | `GOSEEIT_DOCKER_SOCKET` | `unix:///var/run/docker.sock` | Docker daemon socket path |
 | `GOSEEIT_INTEL_GPU_ENABLED` | `true` | Enable Intel DRM sysfs iGPU reader |
 | `GOSEEIT_INTEL_GPU_SYSFS_PATH` | `/sys/class/drm/card0` | Path to Intel DRM sysfs interface |
+
+---
+
+### Docker Container Web UI Redirects & Labels
+
+Containers with web management interfaces or dashboards can be opened directly from the goseeit container table. You can specify a custom redirection link using the **`goseeit.url`** container label:
+
+```yaml
+services:
+  suchi:
+    image: goravg/suchi
+    container_name: suchi
+    ports:
+      - "80:8082"
+    restart: unless-stopped
+    labels:
+      # Direct URL link (absolute, host-relative, or port-relative)
+      goseeit.url: "http://nuc.local:80"
+      # Or port-relative shortcut (automatically resolves to the client's current host):
+      # goseeit.url: ":80"
+      # Optional display name override:
+      # goseeit.name: "Suchi Media Server"
+```
+
+| Label | Purpose | Example |
+| :--- | :--- | :--- |
+| `goseeit.url` | Web UI redirect link | `http://nuc.local:80`, `:8080`, `/grafana` |
+| `goseeit.name` | Custom container display name override | `Suchi Media Server` |
+
+When the `goseeit.url` label is configured, the container name in the goseeit dashboard becomes a direct clickable link with an external link indicator, allowing 1-click navigation to your service.
 
 ---
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Box, AlertCircle, Play, Square, Pause } from 'lucide-react'
+import { Box, AlertCircle, Play, Square, Pause, ExternalLink } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
@@ -11,6 +11,27 @@ import type { ContainerMetric } from '@/types/metrics'
 interface DockerSectionProps {
   containers?: ContainerMetric[]
   dockerError?: string
+}
+
+function formatContainerUrl(url: string): string {
+  if (!url) return ''
+  const trimmed = url.trim()
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed
+  }
+  if (trimmed.startsWith('//')) {
+    return typeof window !== 'undefined' ? `${window.location.protocol}${trimmed}` : `http:${trimmed}`
+  }
+  if (trimmed.startsWith(':')) {
+    const protocol = typeof window !== 'undefined' ? window.location.protocol : 'http:'
+    const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost'
+    return `${protocol}//${hostname}${trimmed}`
+  }
+  if (trimmed.startsWith('/')) {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
+    return `${origin}${trimmed}`
+  }
+  return `http://${trimmed}`
 }
 
 const helper = createDataTableColumnHelper<ContainerMetric>()
@@ -27,6 +48,7 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
           cell: ({ row }) => {
             const c = row.original
             const isRunning = c.state === 'running'
+            const formattedUrl = c.url ? formatContainerUrl(c.url) : null
             return (
               <div className="flex items-center gap-2.5 py-1">
                 <div
@@ -39,11 +61,40 @@ export const DockerSection: React.FC<DockerSectionProps> = ({ containers = [], d
                   <Box className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <div className="font-sans font-semibold text-[#ededed] flex items-center gap-2">
-                    {c.name}
+                  <div className="font-sans font-semibold text-[#ededed] flex items-center gap-1.5">
+                    {formattedUrl ? (
+                      <a
+                        href={formattedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[#ededed] hover:text-[#2f5bff] transition-colors group cursor-pointer"
+                        title={`Open ${c.name} UI (${formattedUrl})`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <span className="group-hover:underline">{c.name}</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-[#2f5bff]/80 group-hover:text-[#2f5bff] transition-colors shrink-0" />
+                      </a>
+                    ) : (
+                      <span>{c.name}</span>
+                    )}
                   </div>
-                  <div className="text-[11px] text-[#969696] font-mono">
-                    {c.id.slice(0, 12)}
+                  <div className="text-[11px] text-[#969696] font-mono flex items-center gap-1.5">
+                    <span>{c.id.slice(0, 12)}</span>
+                    {c.url && formattedUrl && (
+                      <>
+                        <span className="text-[#4e4e4e]">•</span>
+                        <a
+                          href={formattedUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#969696] hover:text-[#ededed] truncate max-w-[140px] font-sans transition-colors"
+                          title={formattedUrl}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {c.url.replace(/^https?:\/\//i, '')}
+                        </a>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

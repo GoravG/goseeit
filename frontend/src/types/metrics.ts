@@ -80,6 +80,7 @@ export interface ContainerMetric {
   net_tx_bytes: number
   block_read_bytes: number
   block_write_bytes: number
+  url?: string
 }
 
 export interface SystemSnapshot {

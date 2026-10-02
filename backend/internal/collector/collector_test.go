@@ -167,3 +167,96 @@ func TestDockerCalculateCPUPercent(t *testing.T) {
 	}
 }
 
+func TestExtractContainerURL(t *testing.T) {
+	tests := []struct {
+		name     string
+		labels   map[string]string
+		expected string
+	}{
+		{
+			name:     "empty labels",
+			labels:   nil,
+			expected: "",
+		},
+		{
+			name: "goseeit.url valid URL",
+			labels: map[string]string{
+				"goseeit.url": "http://nuc.local:80",
+			},
+			expected: "http://nuc.local:80",
+		},
+		{
+			name: "goseeit.url trims whitespace",
+			labels: map[string]string{
+				"goseeit.url": "  http://nuc.local:8082   ",
+			},
+			expected: "http://nuc.local:8082",
+		},
+		{
+			name: "unrelated labels ignored",
+			labels: map[string]string{
+				"custom.url":     "http://nuc.local:80",
+				"traefik.enable": "true",
+			},
+			expected: "",
+		},
+		{
+			name: "empty string goseeit.url",
+			labels: map[string]string{
+				"goseeit.url": "   ",
+			},
+			expected: "",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := extractContainerURL(tc.labels)
+			if got != tc.expected {
+				t.Errorf("extractContainerURL() = %q, want %q", got, tc.expected)
+			}
+		})
+	}
+}
+
+func TestExtractContainerName(t *testing.T) {
+	tests := []struct {
+		name     string
+		names    []string
+		labels   map[string]string
+		expected string
+	}{
+		{
+			name:     "default container name stripped slash",
+			names:    []string{"/suchi"},
+			labels:   nil,
+			expected: "suchi",
+		},
+		{
+			name:  "goseeit.name override",
+			names: []string{"/docker-compose_suchi_1"},
+			labels: map[string]string{
+				"goseeit.name": "Suchi Media",
+			},
+			expected: "Suchi Media",
+		},
+		{
+			name:  "unrelated labels do not override name",
+			names: []string{"/docker-compose_suchi_1"},
+			labels: map[string]string{
+				"custom.name": "Custom Media Server",
+			},
+			expected: "docker-compose_suchi_1",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := extractContainerName(tc.names, tc.labels)
+			if got != tc.expected {
+				t.Errorf("extractContainerName() = %q, want %q", got, tc.expected)
+			}
+		})
+	}
+}
+

@@ -104,4 +104,5 @@ type ContainerMetric struct {
 	NetTxBytes       uint64  `json:"net_tx_bytes"`
 	BlockReadBytes   uint64  `json:"block_read_bytes"`
 	BlockWriteBytes  uint64  `json:"block_write_bytes"`
+	URL              string  `json:"url,omitempty"`
 }

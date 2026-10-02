@@ -131,6 +131,34 @@ func calculateCPUPercent(
 	return 0.0
 }
 
+// extractContainerURL retrieves the configured web UI URL from the container's goseeit.url label.
+func extractContainerURL(labels map[string]string) string {
+	if len(labels) == 0 {
+		return ""
+	}
+	if val, ok := labels["goseeit.url"]; ok {
+		return strings.TrimSpace(val)
+	}
+	return ""
+}
+
+// extractContainerName retrieves the friendly container display name, supporting the goseeit.name
+// label override before falling back to Docker container names.
+func extractContainerName(names []string, labels map[string]string) string {
+	if len(labels) > 0 {
+		if val, ok := labels["goseeit.name"]; ok {
+			val = strings.TrimSpace(val)
+			if val != "" {
+				return val
+			}
+		}
+	}
+	if len(names) > 0 {
+		return strings.TrimPrefix(names[0], "/")
+	}
+	return ""
+}
+
 // Collect inspects active Docker containers.
 func (d *DockerCollector) Collect(ctx context.Context) (DockerResult, error) {
 	if !d.enabled {
@@ -158,10 +186,8 @@ func (d *DockerCollector) Collect(ctx context.Context) (DockerResult, error) {
 	sem := make(chan struct{}, 5) // Concurrently fetch at most 5 containers at a time
 
 	for i, c := range containers {
-		name := ""
-		if len(c.Names) > 0 {
-			name = strings.TrimPrefix(c.Names[0], "/")
-		}
+		name := extractContainerName(c.Names, c.Labels)
+		url := extractContainerURL(c.Labels)
 
 		results[i] = model.ContainerMetric{
 			ID:     c.ID[:min(12, len(c.ID))],
@@ -169,6 +195,7 @@ func (d *DockerCollector) Collect(ctx context.Context) (DockerResult, error) {
 			Image:  c.Image,
 			State:  c.State,
 			Status: c.Status,
+			URL:    url,
 		}
 
 		// Only gather resource stats for running containers
